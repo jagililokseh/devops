@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('SCM checkout') {
+            steps {
+                git changelog: false, poll: false, url: 'git@github.com:jagililokseh/spring-framework-petclinic.git'
+            }
+        }
+        
+        stage('Build Stage') {
+            steps {
+                sh '/var/lib/jenkins/maven38/bin/mvn clean package'
+            }
+        }
+        
+        stage('Storing war into artifactory') {
+            steps {
+                sh 'mv target/petclinic.war target/petclinic-$BUILD_NUMBER.war'
+                sh 'aws s3 cp target/petclinic-$BUILD_NUMBER.war s3://dev-jlkclouds-artifactory'
+            }
+        }
+        
+        stage('Deploy Stage') {
+            steps {
+                sh 'scp target/petclinic-$BUILD_NUMBER.war root@10.0.3.16:/opt/tomcat/webapps/petclinic.war'
+            }
+        }
+    }
+}
