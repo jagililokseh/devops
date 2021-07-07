@@ -1,0 +1,9 @@
+automation:
+
+CREATE USER 'petclinicuser'@'%' IDENTIFIED BY 'b98eLkdGWz2dFGmmnbbzxq';
+CREATE USER 'sonaruser'@'%' IDENTIFIED BY 'b98eLkdGWz2dFGmmnbbzxq';
+CREATE USER sonaruser@localhost IDENTIFIED BY 'b98eLkdGWz2dFGmmnbbzxq';
+
+
+GRANT ALL PRIVILEGES ON petclinic.* TO 'petclinic-user'@'%';
+FLUSH PRIVILEGES;
